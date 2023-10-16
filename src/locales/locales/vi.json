@@ -1,0 +1,64 @@
+{
+  "home": "Home",
+  "logout": "Logout",
+  "paramsError": {
+    "stringMin": "%s should have at least %s characters!",
+    "stringMax": "%s should have at most %s characters!",
+    "numberMin": "%s should greater than %s !",
+    "numberMax": "%s should less than %s !",
+    "anyEmpty": "%s can not be empty!",
+    "anyRequired": "%s  is required",
+    "stringRegexBase": "Invalid %s!",
+    "arrayMin": "%s should have at least %s characters!",
+    "arrayUnique": "%s has been using!",
+    "number": "%s must be a number"
+  },
+  "common": {
+    "tokenVerifyFailed": "Authentication failed. Please login again",
+    "loginFailed": "Email or password is incorrect",
+    "noToken": "Authentication info not found",
+    "authenticationInfoNotFound": "Authentication info not found",
+    "dataAlreadyExisted":"Data already existed",
+    "nameAlreadyExisted":"Game Name already existed",
+    "apiNotFound": "API not found",
+    "serverError": "Server error",
+    "forbidden": "Access denied",
+    "notFound": "Data Not Found!",
+    "validationCodeExpired": "Validation code expired",
+    "timesResendOTP":"Please resend the code after 1 minute",
+    "somethingWrong": "Something went wrong. Let's try one more again",
+    "invalidDataRequest": "Invalid data request",
+    "invalidCode": "Invalid code",
+    "invalidObjectId": "Invalid Object Id",
+    "inputLocation": "Input Location",
+    "limitExceeded":"throttled limit exceeded...",
+    "socialTokenVerifyFailed": "Social token verify failed",
+    "startDate":"Start date",
+    "endDate":"End date",
+    "requestProcessing": "Please wait while we process your request",
+    "dataHasChanged": "Data has changed, cannot modify",
+    "customRequireField": "{{field}} is required"
+    },
+  "media": {
+    "limitFileSize": "File size must be smaller {{size}}",
+    "format": "SVG format is not supported",
+    "invalidFile": "File format must be png or jpg or gif or jpeg!"
+    },
+  "email":{
+    "emailInvalid": "Email is invalid",
+    "expiredCode": "Code has expired!",
+    "emailNoneRegister": "Email is not registered",
+    "incorrectCode": "The OTP code is incorrect",
+    "sendEmailFail": "Email verify not sent",
+    "existedEmail": "Email is already registered, please try another",
+    "emailNotVerified": "Email is not verified"
+  },
+  "user":{
+    "existUser": "The user is already registered",
+    "notExistUser": "The user is non registered",
+    "accountBlocked": "Your account has been blocked",
+    "accountBlockedUntilDate": "Your account has been blocked until {{date}}",
+    "passwordNotMatch": "Password not match",
+    "requiredPassword": "Please enter your password"
+  }
+}
