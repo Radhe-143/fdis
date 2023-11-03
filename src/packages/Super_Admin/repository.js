@@ -1,21 +1,21 @@
 import { Sequelize } from 'sequelize';
-import { SuperAdminSeq} from '../../models';
+import {  SuperAdminSeq } from '../../models';
 import { queryBuilderGetList } from './query-builder'
 import { listInitOptions } from '../../utils/paginate'
+import  bcrypt from 'bcrypt';
 
 import method from './method'
 
-const findById = async (Id) =>
-{
-const raw = `
+const findById = async (Id) => {
+  const raw = `
 select * from [fdis].[dbo].[aspnet_Roles]  as R inner join [fdis].[dbo].[aspnet_UsersInRoles] as URole on R.RoleId=URole.RoleId
 inner join [fdis].[dbo].[aspnet_Membership] as UM  on UM.UserId=URole.[UserId] inner join [fdis].[dbo].[aspnet_Users] as U on U.UserId =  UM.UserId
 inner join [dbo].[Users] as US on US.Id =UM.UserId where R.RoleId='6BF066DD-C1CF-4F0B-B982-7555DE280212' and UM.UserId='${Id}'
  `
- return SuperAdminSeq.sequelize.query(raw, {
-  replacements:[Id],
-  type: Sequelize.QueryTypes.SELECT
- })
+  return SuperAdminSeq.sequelize.query(raw, {
+    replacements: [Id],
+    type: Sequelize.QueryTypes.SELECT
+  })
 }
 
 async function findOne(query) {
@@ -69,12 +69,13 @@ const create = async (body) => {
     INSERT INTO Users (UserName, FirstName, LastName)
     VALUES('${body.UserName}', '${body.FirstName}', '${body.LastName}');
 
-    INSERT INTO aspnet_Users (ApplicationId, UserId, UserName, LoweredUserName, MobileAlias, IsAnonymous, LastActivityDate)
+    INSERT INTO aspnet_Users(ApplicationId, UserId, UserName, LoweredUserName, MobileAlias, IsAnonymous, LastActivityDate)
     VALUES('${ApplicationId}', (SELECT Id FROM Users WHERE UserName = '${body.UserName}'),
     '${body.UserName}', '${body.UserName}', '${body.Mobile}',
     '${body.IsAnonymous}', '${body.LastActivityDate}');
 
-    INSERT INTO aspnet_UsersInRoles(RoleId, UserId)
+
+    INSERT INTO aspnet_UsersInRoles (RoleId, UserId)
     VALUES('${AdminId}', (SELECT Id FROM Users WHERE UserName = '${body.UserName}'));
 
     INSERT INTO aspnet_Membership (ApplicationId, UserId, Password, PasswordFormat, PasswordSalt, MobilePIN, Email, LoweredEmail, PasswordQuestion, PasswordAnswer, IsApproved, IsLockedOut, CreateDate, LastLoginDate, LastPasswordChangedDate, LastLockoutDate, FailedPasswordAttemptCount, FailedPasswordAttemptWindowStart, FailedPasswordAnswerAttemptCount, FailedPasswordAnswerAttemptWindowStart, Comment)
@@ -92,20 +93,20 @@ const create = async (body) => {
 };
 
 
-const updateOne = async (Id,body) => {
+const updateOne = async (Id, body) => {
 
-    // let ApplicationId='04B61B6C-DB3B-49DB-B854-42F3654AD0D2';
+  // let ApplicationId='04B61B6C-DB3B-49DB-B854-42F3654AD0D2';
 
-    console.log("Pass", body.Password)
-    body.Password = await method.hashPassword(body.Password)
-    console.log("Hashed", body.Password)
+  console.log("Pass", body.Password)
+  body.Password = await method.hashPassword(body.Password)
+  console.log("Hashed", body.Password)
 
-    let AdminId='6BF066DD-C1CF-4F0B-B982-7555DE280212';
+  let AdminId = '6BF066DD-C1CF-4F0B-B982-7555DE280212';
 
 
 
-    const raw =
-      `
+  const raw =
+    `
       BEGIN TRAN T1;
       UPDATE  Users
       SET FirstName='${body.FirstName}',LastName='${body.LastName}'
@@ -121,11 +122,35 @@ const updateOne = async (Id,body) => {
       WHERE aspnet_Membership.UserId='${Id}';
       COMMIT TRAN T1;
       `
-       return SuperAdminSeq.sequelize.query(raw, {
-        replacements:[''],
-        type: Sequelize.QueryTypes.SELECT
-       })
+  return SuperAdminSeq.sequelize.query(raw, {
+    replacements: [''],
+    type: Sequelize.QueryTypes.SELECT
+  })
 }
+
+// const updatedata = async (Id, body) => {
+
+//   // let ApplicationId='04B61B6C-DB3B-49DB-B854-42F3654AD0D2';
+
+//   console.log("Pass", body.Password)
+//   body.Password = await method.hashPassword(body.Password)
+//   console.log("Hashed", body.Password)
+//   const raw =
+//     `
+//       BEGIN TRAN T1;
+//       UPDATE  Users
+//       SET FirstName='${body.FirstName}',LastName='${body.LastName}', Email='${body.Email}',
+//       LoweredEmail='${body.LoweredEmail}', Password = '${body.Password}', PasswordSalt = '${body.PasswordSalt}',
+//       Verified='${body.Verified}' , Description = '${body.Description}',
+//       IsApproved='${body.IsApproved}',IsLockedOut='${body.IsLockedOut}',IsAnonymous='${body.IsAnonymous}',
+//       CreateDate='${body.CreateDate}'
+//       WHERE Users.Id='${Id}';
+//       `
+//   return SuperAdminSeq.sequelize.query(raw, {
+//     replacements: [''],
+//     type: Sequelize.QueryTypes.SELECT
+//   })
+// }
 
 
 
@@ -137,7 +162,7 @@ const findAll = async (request) => {
   return SuperPerformer.findAndCountAll({
     where: condition,
     ...option,
-    include: ['Country', 'Branch', 'User'],
+    include: ['User'],
     order: [['UserClient.CompanyName', 'ASC']]
   })
 }
@@ -190,7 +215,7 @@ async function countDocuments(query) {
 const destroy = async (Id) => {
   // return SuperPerformer.destroy({ where: { Id: id } })
   const raw =
-  `
+    `
 
     DELETE FROM Users WHERE Id='${Id}';
     DELETE FROM aspnet_Users WHERE UserId='${Id}';
@@ -200,10 +225,10 @@ const destroy = async (Id) => {
 
 
   `
-   return SuperAdminSeq.sequelize.query(raw, {
-    replacements:[''],
+  return SuperAdminSeq.sequelize.query(raw, {
+    replacements: [''],
     type: Sequelize.QueryTypes.SELECT
-   })
+  })
 
 }
 
@@ -253,7 +278,7 @@ const rawQueryList = async () => {
 
 
 
-                // Original Function //
+// Original Function //
 // const rawQueryList = async (req) => {
 //   let user;
 //   let pass;
@@ -267,6 +292,137 @@ const rawQueryList = async () => {
 //   })
 // }
 
+
+// // findAll the data //
+// const findAlll = async (request, response) => {
+//   try {
+//     const result = await SuperAdminSeq.findAndCountAll({
+//       // Your query or options here
+//     });
+//     response.status(200).json(result);
+//   } catch (error) {
+//     response.status(500).json({ error: 'An error occurred' });
+//   }
+// };
+
+
+
+
+const findAlll = async () => {
+  const raw = `
+      SELECT
+       *
+      FROM
+      [fdis].[dbo].[Administrator]
+    `;
+
+  return SuperAdminSeq.sequelize.query(raw, {
+    type: Sequelize.QueryTypes.SELECT,
+  });
+};
+
+
+const finddata = async (Id) => {
+  const raw = `
+select * from [fdis].[dbo].[Administrator] WHERE UserId='${Id}'
+ `
+  return SuperAdminSeq.sequelize.query(raw, {
+    replacements: [Id],
+    type: Sequelize.QueryTypes.SELECT
+  })
+}
+
+
+
+const deleteRecorddata = async (UserId) => {
+  // return SuperPerformer.destroy({ where: { Id: id } })
+  const raw =
+    `
+
+    DELETE FROM [fdis].[dbo].[Administrator] WHERE UserId='${UserId}';
+  `
+  return SuperAdminSeq.sequelize.query(raw, {
+    replacements: [''],
+    type: Sequelize.QueryTypes.SELECT
+  })
+
+}
+
+
+async function updatedata(query, body) {
+  try {
+    const [count, updatedRows] = await SuperAdminSeq.update(body, {
+      where: {
+        ...query,
+      },
+      returning: true, // This will return the updated rows
+    });
+
+    if (count > 0) {
+      // Rows were updated
+      return {
+        success: true,
+        message: `${count} row(s) updated successfully.`,
+        updatedData: updatedRows,
+      };
+    } else {
+      return {
+        success: false,
+        message: 'No rows were updated.',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: 'An error occurred while updating the data.',
+      error: error.message,
+    };
+  }
+}
+
+
+async function UpdatePass(query, body) {
+  try {
+    // Hash the new password and salt
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(body.Password, saltRounds);
+    const hashedPasswordSalt = await bcrypt.hash(body.PasswordSalt, saltRounds);
+
+    // Find the user by Id
+    const user = await SuperAdminSeq.findOne({ where: { ...query } });
+
+    if (!user) {
+      throw new Error(`User not found.`);
+    }
+
+    // Log the old and new passwords
+    console.log('Old Password:', user.Password);
+    console.log('New Hashed Password:', hashedPassword);
+
+    console.log('Old PasswordSalt:', user.PasswordSalt);
+    console.log('New Hashed PasswordSalt:', hashedPasswordSalt);
+
+    // Update the password in the database
+    const [updatedRows] = await SuperAdminSeq.update(
+      { Password: hashedPassword, PasswordSalt: hashedPasswordSalt },
+      { where: { ...query } }
+    );
+
+    if (updatedRows === 0) {
+      throw new Error('Password not updated.');
+    }
+
+    return true; // Password updated successfully
+  } catch (error) {
+    console.error('Error updating password:', error);
+    throw error; // Rethrow the error to handle it at a higher level if necessary
+  }
+}
+
+
+
+
+
 export default {
   findById,
   findAll,
@@ -277,6 +433,12 @@ export default {
   destroy,
   findAllJoin,
   rawQueryList,
+  findAlll,
+  finddata,
+  updatedata,
+  deleteRecorddata,
+  UpdatePass
+  
   // findAllByRole
 
 }

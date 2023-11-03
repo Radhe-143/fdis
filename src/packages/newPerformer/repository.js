@@ -260,34 +260,34 @@ async function UpdatePassword(query, body) {
 
          // Working Api //
 
-//         // Find data in Another way //
-// const rawQueryList = async (request) => {
-//   return newperformerseq.findAndCountAll({
-//     attributes: {
-//       exclude: request.excludes,
-//       include: request.includes
-//     },
-//     include: [
-//       'NewPerformerdata',
-//     ],
-//     order: [['UserName', 'ASC']], // Order by UserName in ascending order
-//   });
-// };
-
-
+        // Find data in Another way //
 const rawQueryList = async (request) => {
-  const condition = queryBuilderGetList(request)
-  console.log("condition is",condition)
-  const option = listInitOptions(request)
-
-  option.raw = undefined
   return newperformerseq.findAndCountAll({
-    where: condition,
-    ...option,
-    include: ['NewPerformerdata'],
-    order: [['UserName', 'ASC']]
-  })
-}
+    attributes: {
+      exclude: request.excludes,
+      include: request.includes
+    },
+    include: [
+      'NewPerformerdata',
+    ],
+    order: [['UserName', 'ASC']], // Order by UserName in ascending order
+  });
+};
+
+
+// const rawQueryList = async (request) => {
+//   const condition = queryBuilderGetList(request)
+//   console.log("condition is",condition)
+//   const option = listInitOptions(request)
+
+//   option.raw = undefined
+//   return newperformerseq.findAndCountAll({
+//     where: condition,
+//     ...option,
+//     include: ['NewPerformerdata'],
+//     order: [['UserName', 'ASC']]
+//   })
+// }
 
 
 

@@ -151,24 +151,28 @@ async function getfeedback() {
 //     throw error;
 //   }
 
-const feedback=async(req,res)=>{
-  
+const feedback = async (query, body) => {
+  console.log("body data is", body);
+
   const rawQuery = `
     INSERT INTO ElementAudit (IdElement, IdAudit, ElementAuditComment, ElementAuditStatus)
-    VALUES ('${body.IdElement}', '${body.IdAudit}', '${body.ElementAuditComment}', '${body.ElementAuditStatus}');
+    VALUES ('5D015C02-FC5D-4CEB-9A9E-2C0AFADBCABD', '14674CCD-1E6D-4A77-8E7C-17F8AE515DE9', :ElementAuditComment, 'F690CEEB-0657-43C2-8F5B-5EA957B65840');
   `;
-await Modules.sequelize.query(rawQuery,{
-replacements:{
-  IdElement:body.IdElement,
-  IdAudit:body.IdAudit,
-  ElementAuditComment:body.ElementAuditComment,
-  ElementAuditStatus:body.ElementAuditStatus
 
-},
-type:Sequelize.QueryTypes.INSERT
-})
-return
-}
+  try {
+    await Modules.sequelize.query(rawQuery, {
+      replacements: {
+        ElementAuditComment: body.ElementAuditComment,
+      },
+      type: Sequelize.QueryTypes.INSERT,
+    });
+    return 'Success'; // You can return a success message if needed.
+  } catch (error) {
+    console.error(error);
+    return 'Error'; // You should handle the error appropriately in your application.
+  }
+};
+
 
 
 

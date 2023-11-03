@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize'
 import { dbConfig } from '../../init/db'
-import { UserClientSeq } from '../../models'
+import { UserClientSeq , FormErrorElement} from '../../models'
 
 const ElementSeqFactory = () => {
   return dbConfig.define(
@@ -38,6 +38,13 @@ const ElementClientSeq = dbConfig.define('ElementClient', {
 });
 
 const ElementSeq = ElementSeqFactory()
+
+setTimeout(()=>{
+  ElementSeq.hasMany(FormErrorElement,{
+    as:'FormErrorElement',
+    foreignKey:'ElementId'
+  })
+},0)
 
 setTimeout(() => {
   ElementSeq.belongsToMany(UserClientSeq, {

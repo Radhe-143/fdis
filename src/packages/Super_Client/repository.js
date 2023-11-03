@@ -8,10 +8,10 @@ import sequelize from 'sequelize';
 
 const findById = async (Id) =>{
 const raw = `SELECT *FROM Users
-  inner join aspnet_Users on Users.UserName=aspnet_Users.UserName
-  inner join  Users_Client on Users.Id=Users_Client.Id
-  inner join aspnet_UsersInRoles on aspnet_Users.UserId=aspnet_UsersInRoles.UserId
-  inner join aspnet_Roles on aspnet_UsersInRoles.RoleId=aspnet_Roles.RoleId
+  left join aspnet_Users on Users.UserName=aspnet_Users.UserName
+  left join  Users_Client on Users.Id=Users_Client.Id
+  left join aspnet_UsersInRoles on aspnet_Users.UserId=aspnet_UsersInRoles.UserId
+  left join aspnet_Roles on aspnet_UsersInRoles.RoleId=aspnet_Roles.RoleId
   where aspnet_Users.UserId='${Id}'
 
   `
@@ -21,6 +21,10 @@ const raw = `SELECT *FROM Users
  })
 }
 
+
+
+
+
 async function findOne(query) {
   return SuperClient.findOne({
     where: {
@@ -28,6 +32,8 @@ async function findOne(query) {
     }
   });
 }
+
+
 
 const create = async (body) => {
   let ApplicationId='04B61B6C-DB3B-49DB-B854-42F3654AD0D2';
@@ -65,6 +71,9 @@ const create = async (body) => {
    })
 
 }
+
+
+
 
 const updateOne = async (Id,body) => {
 
@@ -107,6 +116,9 @@ const updateOne = async (Id,body) => {
      })
 }
 
+
+
+
 const updatePassword = async (Id,body) => {
 
   console.log("ddddddddddddddddddd", body.Password)
@@ -135,6 +147,8 @@ const findAll = async (request) => {
     order: [['UserClient.CompanyName', 'ASC']]
   })
 }
+
+
 
 const findAllJoin = async (request) => {
   const condition = queryBuilderGetList(request)

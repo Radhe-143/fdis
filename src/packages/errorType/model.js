@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { dbConfig } from '../../init/db';
-import { ErrorKindSeq, ErrorCategorySeq } from '../../models';
+import { ErrorKindSeq, ErrorCategorySeq , FormErrorElement } from '../../models';
 
 const ErrorTypeSeqFactory = () => {
   return dbConfig.define(
@@ -49,6 +49,12 @@ setTimeout(() => {
     as: 'ErrorCategory',
     foreignKey: 'ErrorCategoryId'
   });
+
+  FormErrorElement.hasMany(FormErrorElement,{
+    as:'FormErrorElement',
+    foreignKey:'ErrorTypeId'
+  })
+  
 }, 0);
 
 export default ErrorTypeSeq;

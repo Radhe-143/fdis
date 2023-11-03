@@ -43,5 +43,5 @@ router.get('/:id', controller.show)
 router.delete('/:id', controller.deleteRecord)
 router.delete('/',controller.deleteAllRecords)
 router.get('/clientlocation',controller.locationbyclient)
-
+router.get('/mobdata/:id', controller.indexx)
 export default router

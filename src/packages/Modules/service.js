@@ -38,8 +38,8 @@ async function findAllJoin(query) {
   return repo.findAllJoin(query)
 }
 
-async function feedback(body) {
-  return repo.feedback(body)
+async function feedback(query,body) {
+  return repo.feedback(query,body)
 }
 
 

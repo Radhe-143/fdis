@@ -233,12 +233,35 @@ const CompanyDetail = async (query) => {
 
 //  
 
+const createAudit = async(body,files)=> {
+  const uplodeImagesLogbook = await uplodeRepo.default.uplode(files.LogbookImage[0])
+
+  const uplodeImagesTechnicalAspect = await uplodeRepo.default.uplode(files.TechnicalAspectsImage[0])
+
+const raw =  `INSERT INTO [dbo].[FormErrorElement]([FormId],[ErrorTypeId] ,[ElementId] ,[Logbook] ,[TechnicalAspects] ,[LogbookImage],[TechnicalAspectsImage] ,[Count])
+VALUES
+('${body.FormId}'
+,'${body.ErrorTypeId}'
+, '${body.ElementId}'
+,'${body.Logbook}'
+,'${body.TechnicalAspects}'
+,'${uplodeImagesLogbook}'
+,'${uplodeImagesTechnicalAspect}'
+,${body.Count}
+)`
+const response =  await FormErrorElement.sequelize.query(raw, {
+  replacements:[''],
+  type: Sequelize.QueryTypes.INSERT
+ })
+return response;
+}
+
 // const createAudit = async (body, files) => {
 //   try {
-//     const uplodeImagesLogbook = await uplodeRepo.default.uplode(files.LogbookImage[0]);
-//     const uplodeImagesTechnicalAspect = await uplodeRepo.default.uplode(files.TechnicalAspectsImage[0]);
+//     const uplodeImagesLogbook = await uplodeRepo.default.uplode(files.LogbookImage);
+//     const uplodeImagesTechnicalAspect = await uplodeRepo.default.uplode(files.TechnicalAspectsImage);
 
-//     const raw = `INSERT INTO [fdis].[dbo].[FormErrorElement]([FormId],[ErrorTypeId] ,[ElementId] ,[Logbook] ,[TechnicalAspects] ,[LogbookImage],[TechnicalAspectsImage] ,[Count])
+//     const raw = `INSERT INTO FormErrorElement(FormId,ErrorTypeId ,ElementId ,Logbook ,TechnicalAspects ,LogbookImage,TechnicalAspectsImage ,Count)
 //     VALUES
 //     (
 //     '${body.FormId}'
@@ -254,7 +277,16 @@ const CompanyDetail = async (query) => {
 //     console.log("SQL Query: ", raw); // Add this line for debugging
 
 //     const response = await FormErrorElement.sequelize.query(raw, {
-//       replacements: [''],
+//       replacements: {
+//         FormId: body.FormId,
+//         ErrorTypeId: body.ErrorTypeId,
+//         ElementId: body.ElementId,
+//         Logbook: body.Logbook,
+//         TechnicalAspects: body.TechnicalAspects,
+//         LogbookImage: uplodeImagesLogbook,
+//         TechnicalAspectsImage: uplodeImagesTechnicalAspect,
+//         Count: body.Count,
+//       },
 //       type: Sequelize.QueryTypes.INSERT,
 //     });
 
@@ -280,63 +312,6 @@ const CompanyDetail = async (query) => {
 //     };
 //   }
 // };
-
-const createAudit = async (body, files) => {
-  try {
-    const uplodeImagesLogbook = await uplodeRepo.default.uplode(files.LogbookImage[0]);
-    const uplodeImagesTechnicalAspect = await uplodeRepo.default.uplode(files.TechnicalAspectsImage[0]);
-
-    const raw = `INSERT INTO FormErrorElement(FormId,ErrorTypeId ,ElementId ,Logbook ,TechnicalAspects ,LogbookImage,TechnicalAspectsImage ,Count)
-    VALUES
-    (
-    '${body.FormId}'
-    ,'${body.ErrorTypeId}'
-    , '${body.ElementId}'
-    ,'${body.Logbook}'
-    ,'${body.TechnicalAspects}'
-    ,'${uplodeImagesLogbook}'
-    ,'${uplodeImagesTechnicalAspect}'
-    ,${body.Count}
-    )`;
-
-    console.log("SQL Query: ", raw); // Add this line for debugging
-
-    const response = await FormErrorElement.sequelize.query(raw, {
-      replacements: {
-        FormId: body.FormId,
-        ErrorTypeId: body.ErrorTypeId,
-        ElementId: body.ElementId,
-        Logbook: body.Logbook,
-        TechnicalAspects: body.TechnicalAspects,
-        LogbookImage: uplodeImagesLogbook,
-        TechnicalAspectsImage: uplodeImagesTechnicalAspect,
-        Count: body.Count,
-      },
-      type: Sequelize.QueryTypes.INSERT,
-    });
-
-    console.log("Response data is ", response);
-
-    // Assuming the insertion was successful, you can send a success response
-    return {
-      statusCode: 200, // Status code indicating success (200 OK)
-      body: {
-        message: 'Audit created successfully',
-        auditId: response // Assuming the inserted audit ID is in the first element of the response array
-      },
-    };
-  } catch (error) {
-    // Handle errors and return an error response
-    console.error("Error:", error); // Add this line for debugging
-    return {
-      statusCode: 500, // Internal Server Error
-      body: {
-        error: 'An error occurred while creating the audit',
-        details: error.message, // Include more details about the error if needed
-      },
-    };
-  }
-};
 
 
 
@@ -546,6 +521,15 @@ return body
 }
 
 
+
+const finddata = async (request) => {
+  return FormErrorElement.findAndCountAll({
+    include: ['Element','ErrorType','Forms']
+  })
+}
+
+
+
 export default {
   findOne,
   auth,
@@ -567,6 +551,7 @@ export default {
  userprofile,
  logout,
  getFeedback,
- feedback
+ feedback,
+ finddata
 
 }

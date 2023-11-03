@@ -46,6 +46,42 @@ const deleteRecord = async (req, res) => {
 }
 
 
+
+const deleteRecorddata = async (req, res) => {
+  const [error, data] = await to(service.deleteRecorddata(req.params.id))
+  handleResponse(error, data, req, res)
+}
+
+const updatedata = async (req, res) => {
+  // const body = pick(req.body, config.ALLOWED_UPDATE_ATTRIBUTE)
+  const [error, data] = await to(service.updatedata(req.params.id, req.body,req.user))
+  handleResponse(error, data, req, res)
+}
+
+async function indexxx(req, res) {
+  const [error, result] = await to(service.indexxx(req.query))
+  return handleResponse(error, result, req, res)
+}
+
+async function showww(req, res) {
+  const [error, result] = await to(service.showww(req.params.id))
+  return handleResponse(error, result, req, res)
+}
+
+
+const UpdatePass = async (req, res) => {
+  // Assuming pick, config.ALLOWED_UPDATE_ATTRIBUTE, to, and handleResponse are correctly defined and imported
+
+  // const body = pick(req.body, config.ALLOWED_UPDATE_ATTRIBUTE);
+  
+  const [error, data] = await to(service.UpdatePass(req.params.id, req.body, req.user));
+  
+  // Assuming handleResponse is used to handle the response appropriately
+  handleResponse(error, data, req, res);
+}
+
+
+
 export default {
   
   create,
@@ -53,6 +89,12 @@ export default {
   show,
   update,
   deleteRecord,
-  indexfind
+  indexfind,
+  index,
+  indexxx,
+  showww,
+  updatedata,
+  deleteRecorddata,
+  UpdatePass
   
 }

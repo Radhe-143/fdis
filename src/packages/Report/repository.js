@@ -108,7 +108,6 @@ const findAll = async (req) => {
     INNER JOIN [fdis].[dbo].[Users_Client] as uc ON a.NameClient_Id = uc.Id
     INNER JOIN [fdis].[dbo].[Branches] as br ON br.Id = uc.Branch_Id
     INNER JOIN [fdis].[dbo].[Buildings] as bd ON bd.Id = a.LocationClient_Id
-    LEFT JOIN [Fdis].[dbo].[NewPerformer] as NP ON a.PresentClient=NP.UserId
     LEFT JOIN [fdis].[dbo].[Users] as usr ON usr.Id = uc.User_Id -- Join Users table to get UserName
     ORDER BY a.AuditCode ASC
   `;

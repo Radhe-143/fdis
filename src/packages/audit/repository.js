@@ -776,6 +776,28 @@ async function findallaudit(query) {
 }
 
 
+const rawQueryList = async (Id) => {
+  const rawQuery = `
+  SELECT *
+  FROM Audits AS A
+  LEFT JOIN FormErrorElement1 AS FORM ON A.Id = FORM.ErrorElementId.FormId;
+  `;
+
+  const replacements = { Id };
+
+  try {
+    const results = await AuditSeq.sequelize.query(rawQuery, {
+      replacements,
+      type: Sequelize.QueryTypes.SELECT
+    });
+
+    return results;
+  } catch (error) {
+    console.error('Error executing query:', error);
+    throw error;
+  }
+};
+
 
 
 export default {
@@ -790,4 +812,5 @@ export default {
   findAllLocations,
   findallaudit,
   uploadImageById,
+  rawQueryList
 };

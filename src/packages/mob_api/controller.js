@@ -9,6 +9,11 @@ const auth = async (req, res) => {
   handleResponse(error, data, req, res)
 }
 
+async function finddata(req, res) {
+  const [error, result] = await to(service.finddata(req.query))
+  return handleResponse(error, result, req, res)
+}
+
 const authorizetion = async (req, res) => {
   const [error, data] = await to(service.authorizetion(req.headers))
   handleResponse(error, data, req, res)
@@ -127,7 +132,8 @@ export default {
    userprofile,
    logout,
    index5,
-   feedback
+   feedback,
+   finddata
   
 
 }

@@ -304,9 +304,14 @@ async function findallaudit(query) {
   return repo.findallaudit(query)
 }
 
+async function indexx(id) {
+  return repo.rawQueryList(id)
+}
+
 export default {
   create,
   index,
+  indexx,
   show,
   update,
   destroy,

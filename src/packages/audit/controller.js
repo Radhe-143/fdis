@@ -15,6 +15,16 @@ import config from './config'
 // import config from './config'
 
 
+async function indexx(req, res) {
+  console.log(req.boby)
+  const [error, result] = await to(service.indexx(req.params.id))
+  return handleResponse(error, result, req, res)
+}
+
+
+
+
+
 async function show(req, res) {
   const [error, result] = await to(service.show(req.params.id))
   return handleResponse(error, result, req, res)
@@ -114,12 +124,13 @@ const locationbyclient= async (req,res)=>{
 
 export default {
   create,
-  index,
+  indexx,
   indexJoin,
   show,
   update,
   deleteRecord,
   locationbyclient,
   deleteAllRecords,
-  upload
+  upload,
+  index
 }

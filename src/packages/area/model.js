@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { dbConfig } from '../../init/db';
-import { AreaDescriptionSeq, AuditSeq , CategorySeq, FloorSeq } from '../../models'; // Assuming you have the AuditSeq model in a separate module
+import { AreaDescriptionSeq, AuditSeq , CategorySeq, FloorSeq , FormErrorElement} from '../../models'; // Assuming you have the AuditSeq model in a separate module
 
 const Form = () => {
   return dbConfig.define(
@@ -102,6 +102,12 @@ setTimeout(()=>{
     as:'AreaDescriptions',
     foreignKey:'AreaDescId'
   })
+
+  FormSeq.hasOne(FormErrorElement,{
+    as:'FormErrorElement1',
+    foreignKey:'FormId'
+  })
+  
   
 
 

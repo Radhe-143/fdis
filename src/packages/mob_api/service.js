@@ -20,6 +20,12 @@ async function authorizetion(headers) {
   return repo.authorizetion(headers)
 }
 
+
+async function finddata(query) {
+  return repo.finddata(query)
+}
+
+
 async function logout(headers) {
   return repo.logout(headers)
 }
@@ -122,7 +128,8 @@ export default {
   userprofile,
   logout,
   index5,
-  feedback
+  feedback,
+  finddata
 
 
 }
